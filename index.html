@@ -9,14 +9,20 @@
 <body>
   <main>
     <h1>Korg Electribe 2 WAV-Konverter</h1>
-    <p>Zerlege MP3-Dateien direkt im Browser in kompatible kleine WAV-Samples.</p>
+    <p>Wähle eine Audio- oder Videodatei und exportiere einen manuell gewählten Ausschnitt als kleine WAV-Datei. Die Datei bleibt auf deinem Gerät.</p>
 
     <label class="drop" id="dropzone">
-      <span>MP3 hier ablegen oder auswählen</span>
-      <input id="file" type="file" accept="audio/mpeg,audio/mp3,.mp3" />
+      <span>Audio oder Video hier ablegen oder auswählen</span>
+      <input id="file" type="file" accept="audio/*,video/*,.mp3,.mp4,.mov,.webm,.m4v,.mkv" />
     </label>
 
     <section class="controls">
+      <label>Startzeit (Sekunden)
+        <input id="start" type="number" min="0" step="0.1" value="0" />
+      </label>
+      <label>Länge des Ausschnitts (max. 10 Sekunden)
+        <input id="seconds" type="number" min="0.1" max="10" step="0.1" value="10" />
+      </label>
       <label>Abtastrate
         <select id="rate">
           <option value="44100" selected>44.1 kHz</option>
@@ -25,17 +31,14 @@
       </label>
       <label>Kanäle
         <select id="channels">
-          <option value="1" selected>Mono</option>
+          <option value="1" selected>Mono (kleinere Datei)</option>
           <option value="2">Stereo</option>
         </select>
       </label>
-      <label>Max. Länge (Sekunden)
-        <input id="seconds" type="number" min="1" max="600" value="30" />
-      </label>
-      <label><input id="normalize" type="checkbox" checked /> Lautheit begrenzen</label>
+      <label class="check"><input id="normalize" type="checkbox" checked /> Spitzenpegel begrenzen</label>
     </section>
 
-    <button id="convert" disabled>MP3 in WAV konvertieren</button>
+    <button id="convert" disabled>Ausschnitt als WAV speichern</button>
     <div id="status" aria-live="polite"></div>
   </main>
   <script src="app.js"></script>
