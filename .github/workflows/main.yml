@@ -1,0 +1,32 @@
+name: MP3 zu WAV
+
+on:
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: FFmpeg installieren
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: MP3 in WAV umwandeln
+        run: |
+          mkdir -p wav
+          shopt -s nullglob
+          files=( *.mp3 )
+          if (( ${#files[@]} == 0 )); then
+            echo "Keine MP3-Dateien im Hauptordner gefunden."
+            exit 1
+          fi
+          for f in "${files[@]}"; do
+            ffmpeg -y -i "$f" -vn -ac 1 -ar 44100 -c:a pcm_s16le "wav/${f%.mp3}.wav"
+          done
+
+      - name: WAV-Dateien bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: electribe-2-wav
+          path: wav/
